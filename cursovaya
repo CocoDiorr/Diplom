@@ -1,0 +1,44 @@
+#!/bin/sh
+
+LOGLEVEL="DEBUG"
+
+#if [ "$#" -gt "0" ]; then
+#    if [ "$1" == "-v" ]; then
+#        LOGLEVEL="DEBUG"
+#        shift
+#    fi
+#fi
+
+
+
+# virt_env/env/bin/python3 -m emulator --config example/config.json --log-level $LOGLEVEL --in-fifo example/ex1 --out-fifo example/ex1 --de-code example/ex1.asm $@ \
+#     --hash-table  diplom/ex_del_w_1000 \
+#     --update-alg incr
+
+for file_name in diplom/*.txt
+do
+    rm $file_name
+done
+
+# for file_name in dimplom/ex*/*.txt
+# do
+#     rm $file_name
+# done
+
+for file_name in diplom/*
+do
+    for algo in classic incr
+    do
+        for i in 1 2 3 4 5 6 7 8 9 10
+        do
+            virt_env/env/bin/python3 -m emulator --config example/config.json --log-level $LOGLEVEL --in-fifo example/ex1 --out-fifo example/ex1 --de-code example/ex1.asm $@ \
+            --hash-table  $file_name \
+            --update-alg $algo
+        done
+    done
+done
+
+virt_env/env/bin/python3 comp_res.py
+virt_env/env/bin/python3 graph_data.py
+
+

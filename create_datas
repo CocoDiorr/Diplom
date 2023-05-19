@@ -1,0 +1,15 @@
+#!/bin/sh
+
+for size in 10 50 100 500 1000 3000 6144
+do
+    for type in add mod del
+    do
+        virt_env/env/bin/python3 fill_data.py -n ${size} -d ex_${type}
+        if [ $type = mod ] || [ $type = del ]
+        then
+            virt_env/env/bin/python3 fill_data.py -n ${size} -d ex_${type}_w
+            virt_env/env/bin/python3 make_upd.py -t ${type} -d ex_${type}_w_${size} -w
+        fi
+        virt_env/env/bin/python3 make_upd.py -t ${type} -d ex_${type}_${size}
+    done
+done

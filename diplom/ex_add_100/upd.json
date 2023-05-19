@@ -1,0 +1,5 @@
+{
+    "type": "add",
+    "value": "36:2a:31:86:62:de",
+    "action": "outport:22"
+}

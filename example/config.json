@@ -1,0 +1,142 @@
+{
+  "log_format": "%(levelname)s:\t%(message)s",
+
+  "sizes": {
+    "src_mac": 48,
+    "dst_mac": 48,
+    "src_ip": 32,
+    "dst_ip": 32,
+    "src_port": 16,
+    "dst_port": 16,
+    "in_port": 8,
+    "mark": 32
+  },
+
+  "header": ["src_mac", "mark"],
+  
+  "frequency" : 1000,
+  "ether_ports_cnt": "24",
+  "ctrl_port": 63,
+  
+  "ether_port_power": "200",
+  
+  "agent": {
+  	"log_lines": true,
+	"log_labels": true,
+	"log_instructions":true,
+	"register_size": "16"
+  },
+  
+  "pipeline": {
+    "de_per_pipeline" : "1",
+    "packet_header_size": "128",
+    
+    "metadata_size": "64",
+    "metadata": {"packet_size": ":16", "header_size": ":16", "header_start": ":24", "timestamp": ":8",
+                 "port_map": ":64",
+                 "inbound_port": ":8", "reserved1": ":56",
+                 "user_meta": ":128",
+                 "reserved2": ":192"},
+    
+    "port_mask_ctrl_bit" : "63",
+    "port_mask_reprocess_bit" : "62",
+    
+    "fifo_chip_area" : "83333"
+  },
+  
+  "packet_memory": {
+      "size" : "33554432",
+      "width" : ":256",
+      
+      "mem_kb_static_power": "0.034",
+      "mem_port_dynamic_power": "0.050",
+      
+      "mem_kb_chip_area": "1999"
+  },
+
+  "de": {
+    "memory_size": "524288",
+    "register_size": "16",
+    "offset_reg_size": "2",
+    "instruction_size": "8",
+
+    "log_packet_headers_in": true,
+    "log_packet_headers_out": true,
+    "log_execution": true,
+    "log_metadata": true,
+    
+    "alu_static_power": "0.42",
+    "mem_kb_static_power": "0.034",
+    "reg_byte_static_power": "0.0054",
+    
+    "alu_dynamic_power": "0.0025",
+    "mem_port_dynamic_power": "0.019",
+    
+    "alu_chip_area": "8000",
+    "mem_kb_chip_area": "1999"
+  },
+
+  "de_code": {
+    "log_lines": true,
+    "log_labels": true,
+    "log_instructions": true,
+    
+    "data_format": "{0:02X} {1:02X} {2:02X} {3:02X} {4:02X} {5:02X} {6:02X} {7:02X} {8:02X} {9:02X} {10:02X} {11:02X} {12:02X} {13:02X} {14:02X} {15:02X}",
+    "address_format": "{value:04x}",
+    "argument_format": "{value:X}"
+  },
+
+  "de_instructions": {
+
+    "opcode_size": ":16",
+
+    "types": {
+      "nop":      {"opcode": " 0", "arguments": {}},
+
+      "cmpj":     {"opcode": " 1", "arguments": {"jmp": ":32", "lit": ":64", "msk": ":8"}},
+      "cmpjn":    {"opcode": " 2", "arguments": {"jmp": ":32", "lit": ":64", "msk": ":8"}},
+      "cmpjg":    {"opcode": " 3", "arguments": {"jmp": ":32", "lit": ":64", "msk": ":8"}},
+      "cmpjl":    {"opcode": " 4", "arguments": {"jmp": ":32", "lit": ":64", "msk": ":8"}},
+      "cmpjlge":  {"opcode": "24", "arguments": {"jmpl": ":28", "jmpge": ":28", "lit": ":48"}},
+
+      "load":     {"opcode": " 5", "arguments": {"adr": ":32", "msk": ":8"}},
+      "loadbe":   {"opcode": "23", "arguments": {"adr": ":32", "msk": ":8"}},
+      "loadi":    {"opcode": " 6", "arguments": {"lit": ":64"}},
+      "store":    {"opcode": " 7", "arguments": {"adr": ":32", "msk": ":8"}},
+      "storebe":  {"opcode": "25", "arguments": {"adr": ":32", "msk": ":8"}},
+      "add":      {"opcode": " 8", "arguments": {"adr": ":32", "msk": ":8"}},
+      "addi":     {"opcode": " 9", "arguments": {"lit": ":64"}},
+      "sub":      {"opcode": "10", "arguments": {"adr": ":32", "msk": ":8"}},
+      "subi":     {"opcode": "11", "arguments": {"lit": ":64"}},
+
+      "j":        {"opcode": "12", "arguments": {"adr": ":32"}},
+
+      "rol":      {"opcode": "13", "arguments": {"ofs": ":8"}},
+      "ror":      {"opcode": "14", "arguments": {"ofs": ":8"}},
+      "rcl":      {"opcode": "15", "arguments": {"ofs": ":8"}},
+      "rcr":      {"opcode": "16", "arguments": {"ofs": ":8"}},
+
+      "or":       {"opcode": "17", "arguments": {"adr": ":32", "msk": ":8"}},
+      "orbe":     {"opcode": "26", "arguments": {"adr": ":32", "msk": ":8"}},
+      "ori":      {"opcode": "18", "arguments": {"lit": ":64"}},
+      "xor":      {"opcode": "19", "arguments": {"adr": ":32", "msk": ":8"}},
+      "xorbe":    {"opcode": "27", "arguments": {"adr": ":32", "msk": ":8"}},
+      "xori":     {"opcode": "20", "arguments": {"lit": ":64"}},
+      "and":      {"opcode": "21", "arguments": {"adr": ":32", "msk": ":8"}},
+      "andbe":    {"opcode": "28", "arguments": {"adr": ":32", "msk": ":8"}},
+      "andi":     {"opcode": "22", "arguments": {"lit": ":64"}},
+      
+      "modi":     {"opcode": "29", "arguments": {"lit": ":8"}},
+      
+      "loadoff":  {"opcode": "37", "arguments": {}},
+      "loadoffi": {"opcode": "30", "arguments": {"lit": ":16"}},
+      "cpoff":    {"opcode": "31", "arguments": {}},
+
+      "setsz":    {"opcode": "32", "arguments": {"lit": ":8"}},
+      "setmask":  {"opcode": "33", "arguments": {"lit": ":64"}},
+      "setxmask": {"opcode": "34", "arguments": {"lit": ":64"}},
+      "loadmeta": {"opcode": "35", "arguments": {"adr": ":32", "msk": ":8"}},
+      "storemeta":{"opcode": "36", "arguments": {"adr": ":32", "msk": ":8"}}
+    }
+  }
+}
